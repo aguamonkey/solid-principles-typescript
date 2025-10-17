@@ -22,29 +22,55 @@ console.log(example.greet());
 
   const templates = {
     srp: `// Single Responsibility Principle
-class User {
-  constructor(public name: string, public email: string) {}
-}
+// Each class should have only one reason to change
 
-// Try separating these responsibilities
+// ❌ BAD: Multiple responsibilities
 class UserService {
   validateEmail(email: string): boolean {
-    // Validation logic
     return email.includes('@');
   }
   
-  saveUser(user: User): void {
-    // Database logic
-    console.log('Saving user:', user);
+  saveUser(user: any): void {
+    console.log('Saving to database:', user);
   }
   
-  sendWelcomeEmail(user: User): void {
-    // Email logic
+  sendWelcomeEmail(user: any): void {
     console.log('Sending email to:', user.email);
   }
+}
+
+// ✅ GOOD: Separated responsibilities
+class EmailValidator {
+  validate(email: string): boolean {
+    return email.includes('@');
+  }
+}
+
+class UserRepository {
+  save(user: any): void {
+    console.log('Saving to database:', user);
+  }
+}
+
+class EmailService {
+  sendWelcome(email: string): void {
+    console.log('Sending welcome email to:', email);
+  }
+}
+
+// Usage
+const validator = new EmailValidator();
+const repository = new UserRepository();
+const emailService = new EmailService();
+
+const user = { name: 'John', email: 'john@example.com' };
+if (validator.validate(user.email)) {
+  repository.save(user);
+  emailService.sendWelcome(user.email);
 }`,
+
     ocp: `// Open/Closed Principle
-// Implement a shape calculator that's open for extension
+// Open for extension, closed for modification
 
 interface Shape {
   calculateArea(): number;
@@ -58,15 +84,245 @@ class Rectangle implements Shape {
   }
 }
 
-// Add more shapes without modifying existing code!`,
+class Circle implements Shape {
+  constructor(private radius: number) {}
+  
+  calculateArea(): number {
+    return Math.PI * this.radius * this.radius;
+  }
+}
+
+// New shape added without modifying existing code!
+class Triangle implements Shape {
+  constructor(private base: number, private height: number) {}
+  
+  calculateArea(): number {
+    return (this.base * this.height) / 2;
+  }
+}
+
+// Usage
+const shapes: Shape[] = [
+  new Rectangle(10, 20),
+  new Circle(5),
+  new Triangle(10, 15)
+];
+
+shapes.forEach(shape => {
+  console.log('Area:', shape.calculateArea());
+});`,
+
+    lsp: `// Liskov Substitution Principle
+// Subclasses should be substitutable for their base classes
+
+// ✅ GOOD: Proper abstraction
+interface Bird {
+  getName(): string;
+}
+
+interface FlyingBird extends Bird {
+  fly(): void;
+}
+
+interface SwimmingBird extends Bird {
+  swim(): void;
+}
+
+class Eagle implements FlyingBird {
+  getName(): string {
+    return 'Eagle';
+  }
+  
+  fly(): void {
+    console.log('Eagle is flying high!');
+  }
+}
+
+class Penguin implements SwimmingBird {
+  getName(): string {
+    return 'Penguin';
+  }
+  
+  swim(): void {
+    console.log('Penguin is swimming!');
+  }
+}
+
+// Both can be used as Bird
+function describebird(bird: Bird): void {
+  console.log(\`This is a \${bird.getName()}\`);
+}
+
+const eagle = new Eagle();
+const penguin = new Penguin();
+
+describebird(eagle);   // Works!
+describebird(penguin); // Works!`,
+
+    isp: `// Interface Segregation Principle
+// Clients shouldn't be forced to depend on interfaces they don't use
+
+// ✅ GOOD: Segregated interfaces
+interface Readable {
+  read(): string;
+}
+
+interface Writable {
+  write(data: string): void;
+}
+
+interface Deletable {
+  delete(): void;
+}
+
+// Classes implement only what they need
+class ReadOnlyFile implements Readable {
+  read(): string {
+    return 'File content';
+  }
+}
+
+class ReadWriteFile implements Readable, Writable {
+  private content = '';
+  
+  read(): string {
+    return this.content;
+  }
+  
+  write(data: string): void {
+    this.content = data;
+    console.log('Written:', data);
+  }
+}
+
+class SystemFile implements Readable, Writable, Deletable {
+  private content = '';
+  
+  read(): string {
+    return this.content;
+  }
+  
+  write(data: string): void {
+    this.content = data;
+  }
+  
+  delete(): void {
+    this.content = '';
+    console.log('File deleted');
+  }
+}
+
+// Usage - each function only requires what it needs
+function readContent(file: Readable): void {
+  console.log('Content:', file.read());
+}
+
+function saveData(file: Writable, data: string): void {
+  file.write(data);
+}
+
+const readOnly = new ReadOnlyFile();
+const readWrite = new ReadWriteFile();
+
+readContent(readOnly);  // Works!
+readContent(readWrite); // Works!
+// saveData(readOnly, 'data'); // Won't compile - good!
+saveData(readWrite, 'data'); // Works!`,
+
+    dip: `// Dependency Inversion Principle
+// Depend on abstractions, not concretions
+
+// Define abstractions
+interface Database {
+  save(data: any): void;
+  find(id: string): any;
+}
+
+interface EmailService {
+  send(to: string, message: string): void;
+}
+
+// Concrete implementations
+class MySQLDatabase implements Database {
+  save(data: any): void {
+    console.log('Saving to MySQL:', data);
+  }
+  
+  find(id: string): any {
+    console.log('Finding in MySQL:', id);
+    return { id, name: 'John' };
+  }
+}
+
+class SendGridEmail implements EmailService {
+  send(to: string, message: string): void {
+    console.log(\`SendGrid email to \${to}: \${message}\`);
+  }
+}
+
+// High-level module depends on abstractions
+class UserService {
+  constructor(
+    private database: Database,
+    private emailService: EmailService
+  ) {}
+  
+  createUser(userData: any): void {
+    // Save user
+    this.database.save(userData);
+    
+    // Send welcome email
+    this.emailService.send(
+      userData.email,
+      'Welcome to our platform!'
+    );
+  }
+}
+
+// Dependency injection - easy to swap implementations
+const prodUserService = new UserService(
+  new MySQLDatabase(),
+  new SendGridEmail()
+);
+
+// For testing, we could inject mocks
+class MockDatabase implements Database {
+  save(data: any): void {
+    console.log('Mock save:', data);
+  }
+  find(id: string): any {
+    return { id, name: 'Test User' };
+  }
+}
+
+const testUserService = new UserService(
+  new MockDatabase(),
+  new SendGridEmail()
+);
+
+// Usage
+prodUserService.createUser({ 
+  name: 'John', 
+  email: 'john@example.com' 
+});`
   };
 
   const runCode = () => {
     try {
       setOutput('🚀 Running code...\n');
-      // In production, you'd use a sandboxed environment
-      const result = Function('"use strict"; ' + code)();
-      setOutput(prev => prev + '✅ Code executed successfully!\n' + (result || ''));
+      // Create a safe execution environment
+      const consoleLog = (msg: any) => {
+        setOutput(prev => prev + msg + '\n');
+      };
+      
+      // Replace console.log in the code
+      const modifiedCode = code.replace(/console\.log/g, 'consoleLog');
+      
+      // Execute the code (in production, use a proper sandbox)
+      const func = new Function('consoleLog', modifiedCode);
+      func(consoleLog);
+      
+      setOutput(prev => prev + '✅ Code executed successfully!');
     } catch (error: any) {
       setOutput(`❌ Error: ${error.message}`);
     }
@@ -74,6 +330,7 @@ class Rectangle implements Shape {
 
   const loadTemplate = () => {
     setCode(templates[selectedPrinciple as keyof typeof templates] || templates.srp);
+    setOutput('Template loaded! Click "Run" to execute.');
   };
 
   return (
@@ -132,6 +389,7 @@ class Rectangle implements Shape {
               minimap: { enabled: false },
               fontSize: 14,
               tabSize: 2,
+              wordWrap: 'on',
             }}
           />
         </div>

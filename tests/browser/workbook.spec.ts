@@ -122,3 +122,23 @@ for (const mode of ['desktop','mobile','dark'] as const) {
     await page.getByRole('button',{name:'Record next inspection'}).click();await expect(page.getByRole('status')).toContainText('Inspection recorded');
   });
 }
+
+for (const mode of ['desktop','mobile','dark'] as const) {
+  test(`order supplier boundary: ${mode}`,async ({page}) => {
+    if (mode === 'mobile') await page.setViewportSize({width:390,height:844});
+    if (mode === 'dark') await page.emulateMedia({colorScheme:'dark'});
+    await page.goto('./#/principle/5-dependency-inversion');
+    const tab = page.getByRole('button',{name:'Boundary Lab',exact:true});await tab.focus();await page.keyboard.press('Enter');
+    await page.getByLabel('Supplier scenario',{exact:true}).selectOption('record-after');
+    await page.getByRole('button',{name:'Record sample order',exact:true}).click();await expect(page.getByRole('status')).toContainText('unconfirmed');await expect(page.getByTestId('order-count')).toHaveText('1');
+    await page.getByLabel('Supplier scenario',{exact:true}).selectOption('none');await page.getByRole('button',{name:'Record sample order',exact:true}).click();await expect(page.getByRole('status')).toContainText('replayed');
+    await page.getByLabel('Supplier scenario',{exact:true}).selectOption('ack-before');
+    await page.getByRole('button',{name:'Process pending receipt'}).click();await expect(page.getByRole('status')).toContainText('retry can produce another preview');
+    await expect(page.getByTestId('pending-count')).toHaveText('1');await expect(page.getByTestId('preview-count')).toHaveText('1');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    await page.screenshot({path:`test-results/order-lab-${mode}.png`,fullPage:true});
+    await page.getByLabel('Supplier scenario',{exact:true}).selectOption('none');await page.getByLabel('Receipt supplier',{exact:true}).selectOption('print');
+    await page.getByRole('button',{name:'Process pending receipt'}).click();await expect(page.getByRole('status')).toContainText('Print receipt preview');await expect(page.getByTestId('pending-count')).toHaveText('0');await expect(page.getByTestId('preview-count')).toHaveText('2');
+    await page.getByRole('button',{name:'Process pending receipt'}).click();await expect(page.getByRole('status')).toContainText('No pending receipts');
+  });
+}

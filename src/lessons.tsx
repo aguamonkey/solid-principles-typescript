@@ -1,3 +1,4 @@
+import { OrderBoundaryLab } from "./principles/5-dependency-inversion/advanced/OrderBoundaryLab";
 import { WorkshopCapabilityLab } from "./principles/4-interface-segregation/advanced/WorkshopCapabilityLab";
 import { GeometryContractLab } from "./principles/3-liskov-substitution/advanced/GeometryContractLab";
 import { DispatchLab } from "./principles/2-open-closed/advanced/DispatchLab";
@@ -94,6 +95,8 @@ export const lessons: readonly Lesson[] = [
     beforeFile: "OrderService",
     afterFile: "OrderService",
     demo: OrderManager,
+    lab: OrderBoundaryLab,
+    labLabel: "Boundary Lab",
   },
 ];
 export function lessonPath(lesson: Lesson): string {

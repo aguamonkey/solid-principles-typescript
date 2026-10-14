@@ -1,6 +1,6 @@
 # Dependency Inversion / Order counter
 
-[Repository](../../../README.md) · [Exercise](exercise/README.md)
+[Repository](../../../README.md) · [Exercise](exercise/README.md) · [Solution notes](SOLUTION.md) · [Boundary Lab](advanced/README.md)
 
 Order policy accepts storage and notification abstractions. The composition boundary selects the actual implementations. A generic service container is unnecessary for this small example.
 
@@ -18,4 +18,4 @@ The [foundation tests](../../../src/test/foundations.test.tsx) provide focused e
 
 Inject a failing notification fixture and specify the outcome when storage succeeded first. Write a test for that partial failure, then decide whether to return a richer outcome. Do not pretend notification failure rolled back a recorded order.
 
-The advanced track for this lesson is future work. The current goal is a connected, runnable foundation with clear limits, not a complete production service.
+The [Boundary Lab](advanced/README.md) introduces separate acceptance and processing policies, policy-owned supplier ports, a local order/outbox ledger and acknowledgement failure scenarios. It includes replay/conflict tests, a separate preview deduplication exercise, decision notes and interview prompts. The original foundation remains unchanged so its partial-failure exercise is still yours to implement.

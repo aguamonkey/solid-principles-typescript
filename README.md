@@ -54,9 +54,17 @@ The Contract Lab distinguishes a successful replacement, permitted unavailabilit
 
 The Capability Lab compares a read-only board, shift dispatch and a cohesive inspection desk. Dedicated providers demonstrate that unrelated operations are not required. Narrow types describe dependencies; they do not enforce permissions.
 
+## Order counter · supplier boundaries
+
+<img src="docs/images/order-lab-desktop.png" alt="The order lab retains a recorded order and pending receipt after queue acknowledgement fails." width="620">
+<img src="docs/images/order-lab-mobile.png" alt="The order boundary lab on a narrow mobile viewport." width="230">
+<img src="docs/images/order-lab-dark.png" alt="The order boundary lab in dark appearance." width="620">
+
+The Boundary Lab separates order acceptance from receipt processing. Replay avoids another order; a lost processing acknowledgement can still repeat a supplier effect. All previews and storage remain local memory.
+
 ## How to study
 
-Follow the [learning path](docs/LEARNING_PATH.md). SRP now includes a concrete exercise, separate solution, decision record and interview prompts. OCP adds a [versioned dispatch lab](src/principles/2-open-closed/advanced/README.md), separate compatibility exercise/solution and decision/interview notes. LSP adds a [geometry contract lab](src/principles/3-liskov-substitution/advanced/README.md) with shared behavioural tests, decision notes and a separate triangle exercise. ISP adds a [workshop capability lab](src/principles/4-interface-segregation/advanced/README.md), narrow provider tests, an audit exercise and interview notes. DIP has a connected foundation; its advanced track remains future work.
+Follow the [learning path](docs/LEARNING_PATH.md). SRP now includes a concrete exercise, separate solution, decision record and interview prompts. OCP adds a [versioned dispatch lab](src/principles/2-open-closed/advanced/README.md), separate compatibility exercise/solution and decision/interview notes. LSP adds a [geometry contract lab](src/principles/3-liskov-substitution/advanced/README.md) with shared behavioural tests, decision notes and a separate triangle exercise. ISP adds a [workshop capability lab](src/principles/4-interface-segregation/advanced/README.md), narrow provider tests, an audit exercise and interview notes. DIP adds an [order boundary lab](src/principles/5-dependency-inversion/advanced/README.md), replay and acknowledgement-failure tests, a deduplication exercise and interview notes. All five lessons now include a documented study progression.
 
 The Before and Refactored sections display actual checked-in source. The Demo section mounts the local implementation. The Practice bench provides recall questions and links to exercises; it does **not** compile or execute arbitrary TypeScript. Use your editor and repository tests for coding exercises.
 
@@ -70,7 +78,7 @@ npx playwright install chromium
 npm run test:browser   # Production build must already exist
 ```
 
-The focused suites contain **103 unit/component tests, four documentation-tooling tests and seventeen Chromium browser tests**. Browser checks cover all five demos, direct lesson reloads, guided practice, a narrow viewport and dark appearance. SRP tests include validation, runtime decoding, failure retention, obsolete work, unmounting, storage failure and StrictMode cleanup.
+The focused suites contain **128 unit/component tests, four documentation-tooling tests and twenty Chromium browser tests**. Browser checks cover all five demos, direct lesson reloads, guided practice, a narrow viewport and dark appearance. SRP tests include validation, runtime decoding, failure retention, obsolete work, unmounting, storage failure and StrictMode cleanup.
 
 CI repeats these checks with Node 22 and uploads browser results on failure. No test claims to prove SOLID compliance in every context. The documentation checker covers local inline links, images and Markdown heading fragments; it does not check external URL availability or reference-style links. See [contributing](CONTRIBUTING.md) for screenshot and review expectations.
 

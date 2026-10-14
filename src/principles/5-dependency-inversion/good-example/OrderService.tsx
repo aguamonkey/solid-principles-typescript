@@ -1,166 +1,119 @@
-// ✅ GOOD: High-level and low-level modules depend on abstractions
+import { useMemo, useState } from "react";
 
-// Abstractions (interfaces)
+export interface Order {
+  readonly id: string;
+  readonly customerEmail: string;
+  readonly totalPence: number;
+}
 export interface NotificationService {
-  notify(recipient: string, message: string): void;
+  notify(recipient: string, message: string): string;
 }
-
 export interface Database {
-  save(collection: string, data: any): void;
-  find(collection: string, id: string): any;
+  save(order: Order): void;
+  find(id: string): Order | undefined;
 }
-
-// Low-level module implementing abstraction
 export class EmailNotificationService implements NotificationService {
-  notify(recipient: string, message: string): void {
-    console.log(`📧 Email to ${recipient}: ${message}`);
-    // Email implementation
+  notify(recipient: string, message: string): string {
+    return `Email receipt for ${recipient}: ${message}`;
   }
 }
-
-// Alternative implementation
 export class SMSNotificationService implements NotificationService {
-  notify(recipient: string, message: string): void {
-    console.log(`📱 SMS to ${recipient}: ${message}`);
-    // SMS implementation
+  notify(recipient: string, message: string): string {
+    return `SMS receipt for ${recipient}: ${message}`;
   }
 }
-
-// Low-level database implementations
-export class MongoDatabase implements Database {
-  save(collection: string, data: any): void {
-    console.log(`Saving to MongoDB collection ${collection}:`, data);
-    // MongoDB specific logic
+export class MemoryDatabase implements Database {
+  private orders = new Map<string, Order>();
+  save(order: Order): void {
+    this.orders.set(order.id, { ...order });
   }
-
-  find(collection: string, id: string): any {
-    console.log(`Finding in MongoDB collection ${collection} with id ${id}`);
-    return { id, status: 'pending' };
+  find(id: string): Order | undefined {
+    const order = this.orders.get(id);
+    return order && { ...order };
   }
 }
-
-export class PostgreSQLDatabase implements Database {
-  save(collection: string, data: any): void {
-    console.log(`Saving to PostgreSQL table ${collection}:`, data);
-    // PostgreSQL specific logic
-  }
-
-  find(collection: string, id: string): any {
-    console.log(`Finding in PostgreSQL table ${collection} with id ${id}`);
-    return { id, status: 'pending' };
-  }
-}
-
-// High-level module depending on abstractions ✅
 export class OrderService {
   constructor(
-    private notificationService: NotificationService,
-    private database: Database
+    private readonly notifications: NotificationService,
+    private readonly database: Database,
   ) {}
-
-  createOrder(orderData: any): void {
-    // Business logic
-    this.database.save('orders', orderData);
-    
-    // Using abstraction - not tied to specific implementation
-    this.notificationService.notify(
-      orderData.customerEmail,
-      `Your order ${orderData.id} has been created`
+  createOrder(order: Order): string {
+    if (
+      !order.id.trim() ||
+      !order.customerEmail.trim() ||
+      !Number.isSafeInteger(order.totalPence) ||
+      order.totalPence < 0
+    ) {
+      throw new Error("Invalid order.");
+    }
+    this.database.save(order);
+    return this.notifications.notify(
+      order.customerEmail,
+      `Order ${order.id} recorded`,
     );
   }
-
-  getOrder(orderId: string): any {
-    return this.database.find('orders', orderId);
+  getOrder(id: string): Order | undefined {
+    return this.database.find(id);
   }
 }
-
-// Dependency injection container
-export class ServiceContainer {
-  private services = new Map<string, any>();
-
-  register(name: string, service: any): void {
-    this.services.set(name, service);
-  }
-
-  get<T>(name: string): T {
-    return this.services.get(name);
-  }
-}
-
-// React component with dependency injection
-import React, { useState, useMemo } from 'react';
-
-interface OrderManagerProps {
-  notificationService?: NotificationService;
+const sampleNotifications = {
+  email: new EmailNotificationService(),
+  sms: new SMSNotificationService(),
+};
+export function OrderManager({
+  services = sampleNotifications,
+  database,
+}: {
+  services?: Readonly<Record<"email" | "sms", NotificationService>>;
   database?: Database;
-}
-
-export const OrderManager: React.FC<OrderManagerProps> = ({
-  notificationService = new EmailNotificationService(),
-  database = new MongoDatabase()
-}) => {
-  // ✅ Dependencies are injected, making the component testable
-  const orderService = useMemo(
-    () => new OrderService(notificationService, database),
-    [notificationService, database]
+}) {
+  const [sessionDatabase] = useState(() => new MemoryDatabase());
+  const [channel, setChannel] = useState<"email" | "sms">("email");
+  const [status, setStatus] = useState("");
+  const service = useMemo(
+    () => new OrderService(services[channel], database ?? sessionDatabase),
+    [services, channel, database, sessionDatabase],
   );
-  
-  const [orderStatus, setOrderStatus] = useState<string>('');
-  const [notificationType, setNotificationType] = useState<'email' | 'sms'>('email');
-
-  const handleCreateOrder = () => {
-    const order = {
-      id: Date.now().toString(),
-      customerEmail: 'customer@example.com',
-      items: ['item1', 'item2'],
-      total: 99.99
-    };
-    
-    orderService.createOrder(order);
-    setOrderStatus(`Order created with ${notificationType} notification!`);
-  };
-
   return (
-    <div className="p-4">
-      <div className="mb-4">
-        <label className="mr-2">Notification Type:</label>
-        <select 
-          value={notificationType} 
-          onChange={(e) => setNotificationType(e.target.value as 'email' | 'sms')}
-          className="px-2 py-1 border rounded"
+    <section>
+      <label>
+        Notification channel
+        <select
+          value={channel}
+          onChange={(event) =>
+            setChannel(event.target.value === "sms" ? "sms" : "email")
+          }
         >
           <option value="email">Email</option>
           <option value="sms">SMS</option>
         </select>
-      </div>
-      <button 
-        onClick={handleCreateOrder}
-        className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+      </label>
+      <button
+        onClick={() => {
+          try {
+            setStatus(
+              service.createOrder({
+                id: crypto.randomUUID(),
+                customerEmail: "member@example.com",
+                totalPence: 9999,
+              }),
+            );
+          } catch {
+            setStatus("The order could not be completed.");
+          }
+        }}
       >
-        Create Order (Dependency Injected)
+        Record sample order
       </button>
-      {orderStatus && <p className="mt-2 text-green-600">{orderStatus}</p>}
-    </div>
+      {status && (
+        <p role="status" className="notice">
+          {status}
+        </p>
+      )}
+      <p className="scope-note">
+        In-memory orders and local notification receipts. No database, payment
+        or message service is contacted.
+      </p>
+    </section>
   );
-};
-
-// Example usage showing how easy it is to swap implementations
-export const App: React.FC = () => {
-  const [useEmail, setUseEmail] = useState(true);
-  
-  const notificationService = useEmail 
-    ? new EmailNotificationService()
-    : new SMSNotificationService();
-
-  return (
-    <div>
-      <button onClick={() => setUseEmail(!useEmail)}>
-        Switch to {useEmail ? 'SMS' : 'Email'}
-      </button>
-      <OrderManager 
-        notificationService={notificationService}
-        database={new MongoDatabase()}
-      />
-    </div>
-  );
-};
+}

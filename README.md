@@ -1,101 +1,60 @@
-# SOLID Principles with TypeScript and React
+# SOLID principles · TypeScript & React
 
-<div align="center">
-  <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" />
-  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" />
-  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" />
-  <img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge" />
-</div>
+A workbook for practising five design questions through source, local demonstrations and small changes. Start with a lesson, run its demo, then attempt the exercise before reading a solution.
 
-## 📚 About This Repository
+| Lesson | Setting | Design question |
+| --- | --- | --- |
+| [01 · Single Responsibility](src/principles/1-single-responsibility/README.md) | Contact desk | Where should this change belong? |
+| [02 · Open/Closed](src/principles/2-open-closed/README.md) | Dispatch room | Which algorithm stays stable when we add a channel? |
+| [03 · Liskov Substitution](src/principles/3-liskov-substitution/README.md) | Geometry bench | Does the replacement keep the caller’s promise? |
+| [04 · Interface Segregation](src/principles/4-interface-segregation/README.md) | Workshop roster | What does this consumer actually need? |
+| [05 · Dependency Inversion](src/principles/5-dependency-inversion/README.md) | Order counter | Can the supplier change independently of the policy? |
 
-This repository demonstrates the **SOLID principles** of object-oriented design using TypeScript and React. Each principle is explained with practical examples, showing both violations and proper implementations.
+## Run locally
 
-## 🎯 What are SOLID Principles?
-
-SOLID is an acronym for five design principles that help developers create more maintainable, flexible, and scalable software:
-
-1. **S** - [Single Responsibility Principle (SRP)](./src/principles/1-single-responsibility)
-2. **O** - [Open/Closed Principle (OCP)](./src/principles/2-open-closed)
-3. **L** - [Liskov Substitution Principle (LSP)](./src/principles/3-liskov-substitution)
-4. **I** - [Interface Segregation Principle (ISP)](./src/principles/4-interface-segregation)
-5. **D** - [Dependency Inversion Principle (DIP)](./src/principles/5-dependency-inversion)
-
-## 🚀 Getting Started
-
-### Prerequisites
-- Node.js (v16 or higher)
-- npm or yarn
-- Basic knowledge of TypeScript and React
-
-### Installation
+Use Node.js **22.12 or newer** and npm. CI uses Node 22. The Vite 7 toolchain no longer supports the original README’s Node 16 requirement.
 
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/solid-principles-typescript.git
-
-# Navigate to the project directory
+git clone https://github.com/aguamonkey/solid-principles-typescript.git
 cd solid-principles-typescript
-
-# Install dependencies
-npm install
-
-# Start the development server
+npm ci
 npm run dev
 ```
 
-## 📂 Project Structure
+Open the URL printed by Vite. Production assets use `/solid-principles-typescript/`; hash routing keeps direct lesson links working on static hosting. This milestone does not deploy a website.
 
+## Contact desk
+
+<img src="docs/images/contact-desk.png" alt="The running Contact desk lesson, with a loaded profile, editable fields and source controls." width="620">
+<img src="docs/images/contact-desk-mobile.png" alt="Contact desk on a narrow mobile viewport." width="230">
+<img src="docs/images/contact-desk-dark.png" alt="Contact desk in dark appearance." width="620">
+
+Actual Chromium screenshots from production browser tests. The workbook uses ruled paper, serif headings and an indexed navigation rather than generic marketing cards.
+
+## How to study
+
+Follow the [learning path](docs/LEARNING_PATH.md). SRP now includes a concrete exercise, separate solution, decision record and interview prompts. The other four foundations are connected and runnable, with focused tests and concrete exercises; their deeper guides and advanced tracks remain future work.
+
+The Before and Refactored sections display actual checked-in source. The Demo section mounts the local implementation. The Practice bench provides recall questions and links to exercises; it does **not** compile or execute arbitrary TypeScript. Use your editor and repository tests for coding exercises.
+
+The examples use different settings from the [Swift series](https://github.com/aguamonkey/SOLID-Principles-with-Swift), while sharing design questions. More interfaces or classes do not automatically make a design better.
+
+## Verification
+
+```bash
+npm run check          # Types, enforced lint, docs, unit/component tests, production build
+npx playwright install chromium
+npm run test:browser   # Production build must already exist
 ```
-solid-principles-typescript/
-├── src/
-│   ├── principles/
-│   │   ├── 1-single-responsibility/
-│   │   ├── 2-open-closed/
-│   │   ├── 3-liskov-substitution/
-│   │   ├── 4-interface-segregation/
-│   │   └── 5-dependency-inversion/
-│   ├── components/
-│   ├── App.tsx
-│   └── main.tsx
-├── public/
-├── package.json
-├── tsconfig.json
-├── tailwind.config.js
-└── README.md
-```
 
-## 🎓 Learning Path
+The focused suites contain **40 unit/component tests, four documentation-tooling tests and eight Chromium browser tests**. Browser checks cover all five demos, direct lesson reloads, guided practice, a narrow viewport and dark appearance. SRP tests include validation, runtime decoding, failure retention, obsolete work, unmounting, storage failure and StrictMode cleanup.
 
-Each principle folder contains:
-- **README.md**: Detailed explanation of the principle
-- **bad-example/**: Code that violates the principle
-- **good-example/**: Properly refactored code following the principle
-- **exercise/**: Practice problems to reinforce learning
+CI repeats these checks with Node 22 and uploads browser results on failure. No test claims to prove SOLID compliance in every context. The documentation checker covers local inline links, images and Markdown heading fragments; it does not check external URL availability or reference-style links. See [contributing](CONTRIBUTING.md) for screenshot and review expectations.
 
-## 🤝 Contributing
+## Scope
 
-Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+These are local teaching fixtures. There are no real account, payment, notification or database services. SRP snapshot storage is session memory. The examples and browser tests do not constitute a security review, a full accessibility audit or support for every browser. The intentionally coupled Before examples retain unsafe patterns for comparison; lint exceptions are restricted to those files.
 
-## 📄 License
+## Licence
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- Robert C. Martin (Uncle Bob) for formulating the SOLID principles
-- The TypeScript and React communities for excellent documentation
-- All contributors who help improve this educational resource
-
-## 📚 Additional Resources
-
-- [Clean Code by Robert C. Martin](https://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882)
-- [TypeScript Documentation](https://www.typescriptlang.org/docs/)
-- [React Documentation](https://react.dev/)
-- [Refactoring Guru - SOLID](https://refactoring.guru/design-patterns/solid-principles)
-
----
-
-<div align="center">
-  Made with ❤️ for the developer community
-</div>
+[MIT](LICENSE)

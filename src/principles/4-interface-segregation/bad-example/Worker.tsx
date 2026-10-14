@@ -66,7 +66,7 @@ export class RobotWorker implements Worker {
 }
 
 // React component showing the problem
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 export const WorkerDemo: React.FC = () => {
   const [errors, setErrors] = useState<string[]>([]);
@@ -74,7 +74,7 @@ export const WorkerDemo: React.FC = () => {
   const testHumanWorker = () => {
     const human = new HumanWorker();
     const newErrors: string[] = [];
-    
+
     try {
       human.work();
       human.eat();
@@ -82,14 +82,14 @@ export const WorkerDemo: React.FC = () => {
     } catch (e: any) {
       newErrors.push(e.message);
     }
-    
+
     setErrors(newErrors);
   };
 
   const testRobotWorker = () => {
     const robot = new RobotWorker();
     const newErrors: string[] = [];
-    
+
     try {
       robot.work();
       robot.chargeBattery();
@@ -97,17 +97,23 @@ export const WorkerDemo: React.FC = () => {
     } catch (e: any) {
       newErrors.push(e.message);
     }
-    
+
     setErrors(newErrors);
   };
 
   return (
     <div className="p-4">
       <div className="space-x-2">
-        <button onClick={testHumanWorker} className="px-4 py-2 bg-blue-500 text-white rounded">
+        <button
+          onClick={testHumanWorker}
+          className="px-4 py-2 bg-blue-500 text-white rounded"
+        >
           Test Human Worker
         </button>
-        <button onClick={testRobotWorker} className="px-4 py-2 bg-green-500 text-white rounded">
+        <button
+          onClick={testRobotWorker}
+          className="px-4 py-2 bg-green-500 text-white rounded"
+        >
           Test Robot Worker
         </button>
       </div>
@@ -115,7 +121,9 @@ export const WorkerDemo: React.FC = () => {
         <div className="mt-4">
           <p className="text-red-600 font-bold">Errors (ISP Violation):</p>
           {errors.map((error, i) => (
-            <p key={i} className="text-red-500">{error}</p>
+            <p key={i} className="text-red-500">
+              {error}
+            </p>
           ))}
         </div>
       )}

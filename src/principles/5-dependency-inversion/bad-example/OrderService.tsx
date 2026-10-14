@@ -2,7 +2,7 @@
 
 // Low-level module (concrete implementation)
 class EmailService {
-  sendEmail(to: string, subject: string, body: string): void {
+  sendEmail(to: string, subject: string, _body: string): void {
     console.log(`Sending email to ${to}: ${subject}`);
     // Actual email sending logic
   }
@@ -18,7 +18,7 @@ class MySQLDatabase {
   find(table: string, id: string): any {
     console.log(`Finding in MySQL table ${table} with id ${id}`);
     // MySQL specific logic
-    return { id, status: 'pending' };
+    return { id, status: "pending" };
   }
 }
 
@@ -35,44 +35,44 @@ export class OrderService {
 
   createOrder(orderData: any): void {
     // Business logic
-    this.database.save('orders', orderData);
-    
+    this.database.save("orders", orderData);
+
     // Tightly coupled to EmailService
     this.emailService.sendEmail(
       orderData.customerEmail,
-      'Order Confirmation',
-      `Your order ${orderData.id} has been created`
+      "Order Confirmation",
+      `Your order ${orderData.id} has been created`,
     );
   }
 
   getOrder(orderId: string): any {
-    return this.database.find('orders', orderId);
+    return this.database.find("orders", orderId);
   }
 }
 
 // React component - also violating DIP
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 export const OrderManager: React.FC = () => {
   // ❌ Component directly creates service - can't inject mocks for testing
   const orderService = new OrderService();
-  const [orderStatus, setOrderStatus] = useState<string>('');
+  const [orderStatus, setOrderStatus] = useState<string>("");
 
   const handleCreateOrder = () => {
     const order = {
-      id: '12345',
-      customerEmail: 'customer@example.com',
-      items: ['item1', 'item2'],
-      total: 99.99
+      id: "12345",
+      customerEmail: "customer@example.com",
+      items: ["item1", "item2"],
+      total: 99.99,
     };
-    
+
     orderService.createOrder(order);
-    setOrderStatus('Order created successfully!');
+    setOrderStatus("Order created successfully!");
   };
 
   return (
     <div className="p-4">
-      <button 
+      <button
         onClick={handleCreateOrder}
         className="px-4 py-2 bg-blue-500 text-white rounded"
       >

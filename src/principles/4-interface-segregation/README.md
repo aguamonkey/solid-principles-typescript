@@ -1,37 +1,21 @@
-# Interface Segregation Principle (ISP)
+# Interface Segregation / Workshop roster
 
-## Definition
-> Clients should not be forced to depend on interfaces they do not use.
+[Repository](../../../README.md) · [Exercise](exercise/README.md)
 
-## Why It Matters
+Consumers request a capability such as charging rather than every operation in a large Worker interface. A human does not need to pretend to have a battery. Small interfaces are useful because of consumer requirements, not because one method per interface is a universal rule.
 
-ISP promotes lean, focused interfaces:
-- **Reduces coupling**: Clients only depend on what they need
-- **Improves clarity**: Interfaces have clear, specific purposes
-- **Prevents bloat**: No unnecessary method implementations
-- **Enhances flexibility**: Easier to implement and test
+## Run the example
 
-## Signs of ISP Violation
+Select Demo to see actual work, feeding and charging results returned by the participating implementations. Human, robot and cyborg fixtures share capabilities as appropriate. There is no real automation backend.
 
-- Interfaces with many methods
-- Implementing classes with empty/throwing methods
-- Interfaces trying to serve multiple client types
-- Methods that only some implementations actually use
-- "Fat" interfaces that do too much
+## Follow the source
 
-## Example in This Repository
+Read the [before example](bad-example/Worker.tsx), then the [refactored example](good-example/Worker.tsx). Open the matching lesson’s Before/Refactored sections to see the actual source rather than a fallback snippet.
 
-### Bad Example ❌
-`Worker` interface forces all workers to implement methods they don't need (robots don't eat, humans don't need charging).
+The [foundation tests](../../../src/test/foundations.test.tsx) provide focused evidence for the chosen boundary. They do not prove every future implementation satisfies the principle.
 
-### Good Example ✅
-Segregated interfaces (`Workable`, `Eatable`, `Chargeable`) that can be composed as needed.
+## Study pressure and limits
 
-## Real-World Application
+Add an inspection consumer accepting only an Inspectable capability. Use a fixture that exposes only inspection, then decide which existing workers should support it. Keep unrelated charging/feeding functions unchanged.
 
-Common patterns following ISP:
-- Role interfaces
-- Capability interfaces
-- Single-method interfaces
-- Interface composition
-- Mixin patterns
+The advanced track for this lesson is future work. The current goal is a connected, runnable foundation with clear limits, not a complete production service.

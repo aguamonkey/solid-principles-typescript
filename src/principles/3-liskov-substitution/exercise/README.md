@@ -1,20 +1,9 @@
-# Exercise
+# Exercise · Geometry bench
 
-## Challenge
-Refactor the provided code to follow this SOLID principle.
+[Lesson](../README.md)
 
-## Requirements
-1. Identify the violation
-2. Refactor the code
-3. Write tests to verify your solution
-4. Document your design decisions
+Specify the supported dimension domain, validate constructors/setters, and add shared contract tests for each shape. Explain which failures happen at construction and why successful shapes remain substitutable.
 
-## Getting Started
-```typescript
-// Your exercise code here
-```
+Before coding, write down the consumer promise, the files you expect to change, and one alternative. Implement the change in your local editor, add a behavioural test, and run `npm run check`.
 
-## Hints
-- Think about what responsibilities/behaviors belong together
-- Consider how you can make the code more flexible
-- Remember: good design makes testing easier
+Explain which existing behaviour stayed stable. This exercise is not preimplemented, and detailed solution notes for this lesson are future work.

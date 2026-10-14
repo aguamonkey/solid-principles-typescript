@@ -2,53 +2,53 @@
 
 // Define the abstraction
 export interface NotificationStrategy {
-  send(recipient: string, message: string): void;
+  send(recipient: string, message: string): string;
   getType(): string;
 }
 
 // Concrete implementations
 export class EmailNotification implements NotificationStrategy {
-  send(recipient: string, message: string): void {
-    console.log(`Sending email to ${recipient}: ${message}`);
+  send(recipient: string, message: string): string {
+    return `Sending email to ${recipient}: ${message}`;
     // Email sending logic
   }
 
   getType(): string {
-    return 'email';
+    return "email";
   }
 }
 
 export class SMSNotification implements NotificationStrategy {
-  send(recipient: string, message: string): void {
-    console.log(`Sending SMS to ${recipient}: ${message}`);
+  send(recipient: string, message: string): string {
+    return `Sending SMS to ${recipient}: ${message}`;
     // SMS sending logic
   }
 
   getType(): string {
-    return 'sms';
+    return "sms";
   }
 }
 
 export class PushNotification implements NotificationStrategy {
-  send(recipient: string, message: string): void {
-    console.log(`Sending push notification to ${recipient}: ${message}`);
+  send(recipient: string, message: string): string {
+    return `Sending push notification to ${recipient}: ${message}`;
     // Push notification logic
   }
 
   getType(): string {
-    return 'push';
+    return "push";
   }
 }
 
 // New notification type - no existing code modified!
 export class SlackNotification implements NotificationStrategy {
-  send(recipient: string, message: string): void {
-    console.log(`Sending Slack message to ${recipient}: ${message}`);
+  send(recipient: string, message: string): string {
+    return `Sending Slack message to ${recipient}: ${message}`;
     // Slack sending logic
   }
 
   getType(): string {
-    return 'slack';
+    return "slack";
   }
 }
 
@@ -57,20 +57,23 @@ export class NotificationService {
   private strategies: Map<string, NotificationStrategy> = new Map();
 
   registerStrategy(strategy: NotificationStrategy): void {
-    this.strategies.set(strategy.getType(), strategy);
+    const key = strategy.getType();
+    if (!key.trim() || this.strategies.has(key))
+      throw new Error(`Invalid or duplicate strategy: ${key}`);
+    this.strategies.set(key, strategy);
   }
 
-  send(type: string, recipient: string, message: string): void {
+  send(type: string, recipient: string, message: string): string {
     const strategy = this.strategies.get(type);
     if (!strategy) {
       throw new Error(`No strategy registered for type: ${type}`);
     }
-    strategy.send(recipient, message);
+    return strategy.send(recipient, message);
   }
 }
 
 // React component using the good service
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from "react";
 
 export const NotificationSender: React.FC = () => {
   const service = useMemo(() => {
@@ -83,14 +86,15 @@ export const NotificationSender: React.FC = () => {
   }, []);
 
   const notifications = [
-    { type: 'email', label: 'Email', color: 'bg-blue-500' },
-    { type: 'sms', label: 'SMS', color: 'bg-green-500' },
-    { type: 'push', label: 'Push', color: 'bg-purple-500' },
-    { type: 'slack', label: 'Slack', color: 'bg-yellow-500' },
+    { type: "email", label: "Email", color: "bg-blue-500" },
+    { type: "sms", label: "SMS", color: "bg-green-500" },
+    { type: "push", label: "Push", color: "bg-purple-500" },
+    { type: "slack", label: "Slack", color: "bg-yellow-500" },
   ];
 
+  const [receipt, setReceipt] = useState("");
   const handleSend = (type: string) => {
-    service.send(type, 'user@example.com', 'Hello!');
+    setReceipt(service.send(type, "user@example.com", "Hello!"));
   };
 
   return (
@@ -104,6 +108,14 @@ export const NotificationSender: React.FC = () => {
           Send {label}
         </button>
       ))}
+      {receipt && (
+        <p role="status" className="notice">
+          {receipt}
+        </p>
+      )}
+      <p className="scope-note">
+        Local delivery receipts. No messages are actually sent.
+      </p>
     </div>
   );
 };

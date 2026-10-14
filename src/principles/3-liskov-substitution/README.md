@@ -1,36 +1,21 @@
-# Liskov Substitution Principle (LSP)
+# Liskov Substitution / Geometry bench
 
-## Definition
-> Objects of a superclass should be replaceable with objects of its subclasses without breaking the application.
+[Repository](../../../README.md) · [Exercise](exercise/README.md)
 
-## Why It Matters
+An implementation must honour behavioural promises, not just method signatures. The before example shows a mutable Square changing the Rectangle setters’ meaning. The refactored caller uses area/perimeter operations without that mutable rectangle contract.
 
-LSP ensures that inheritance hierarchies are semantically correct:
-- **Prevents surprises**: Subclasses behave as expected
-- **Enables polymorphism**: Can use base class references safely
-- **Improves reliability**: No unexpected behavior from substitutions
-- **Maintains contracts**: Subclasses honor parent class promises
+## Run the example
 
-## Signs of LSP Violation
+Select Demo and calculate the total area for a 5×4 rectangle, side-3 square and radius-2 circle. The expected total is approximately 41.57. These are local positive-dimension fixtures; the baseline does not yet validate negative, nonfinite or overflowing dimensions.
 
-- Subclass throws exceptions for inherited methods
-- Empty method implementations in subclasses
-- Type checking before calling methods
-- Subclass strengthens preconditions or weakens postconditions
-- "Is-a" relationship doesn't truly hold
+## Follow the source
 
-## Example in This Repository
+Read the [before example](bad-example/Shapes.tsx), then the [refactored example](good-example/Shapes.tsx). Open the matching lesson’s Before/Refactored sections to see the actual source rather than a fallback snippet.
 
-### Bad Example ❌
-`Square` extends `Rectangle` but violates LSP because changing width also changes height, breaking rectangle's expected behavior.
+The [foundation tests](../../../src/test/foundations.test.tsx) provide focused evidence for the chosen boundary. They do not prove every future implementation satisfies the principle.
 
-### Good Example ✅
-Uses `Shape` interface with proper implementations that maintain expected behaviors for each shape type.
+## Study pressure and limits
 
-## Real-World Application
+Specify the supported dimension domain, validate constructors/setters, and add shared contract tests for each shape. Explain which failures happen at construction and why successful shapes remain substitutable.
 
-Common LSP violations to avoid:
-- Square/Rectangle problem
-- Birds that can't fly
-- Read-only collections throwing on write operations
-- Employees that don't fit all employee behaviors
+The advanced track for this lesson is future work. The current goal is a connected, runnable foundation with clear limits, not a complete production service.

@@ -1,26 +1,101 @@
-import React from 'react';
-import { useUserData } from './hooks/useUserData';
-import { UserDisplay } from './components/UserDisplay';
-import { ErrorDisplay } from './components/ErrorDisplay';
-import { LoadingSpinner } from './components/LoadingSpinner';
+import { useEffect, useState } from "react";
+import { useUserData } from "./hooks/useUserData";
+import { UserDisplay } from "./components/UserDisplay";
+import { ErrorDisplay } from "./components/ErrorDisplay";
+import { LoadingSpinner } from "./components/LoadingSpinner";
+import { SampleUserApi, type UserApi } from "./services/userApi";
+import { MemoryUserStorage, type UserStorage } from "./services/storageService";
 
-// ✅ GOOD: This component has a single responsibility - orchestrating the user profile view
-export const UserProfile: React.FC = () => {
-  const { user, errors, isLoading, updateUser } = useUserData();
-
-  if (isLoading) return <LoadingSpinner />;
-  if (!user) return <div>No user found</div>;
-
+export function UserProfile({
+  api,
+  storage,
+}: {
+  api: UserApi;
+  storage: UserStorage;
+}) {
+  const { user, errors, isLoading, refresh, updateUser } = useUserData(
+    api,
+    storage,
+  );
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  useEffect(() => {
+    setName(user?.name ?? "");
+    setEmail(user?.email ?? "");
+  }, [user]);
   return (
-    <div className="p-4">
-      <UserDisplay user={user} />
+    <section className="profile-sheet" aria-label="Contact profile">
+      <p className="eyebrow">MEMBER SERVICES / CARD 037</p>
+      {isLoading && <LoadingSpinner />}
+      {user ? (
+        <>
+          <UserDisplay user={user} />
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              void updateUser({ ...user, name, email });
+            }}
+            noValidate
+          >
+            <label>
+              Name
+              <input
+                value={name}
+                onChange={(event) => setName(event.target.value)}
+                autoComplete="name"
+              />
+            </label>
+            <label>
+              Email
+              <input
+                type="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                autoComplete="email"
+              />
+            </label>
+            <button disabled={isLoading}>Save profile</button>
+          </form>
+        </>
+      ) : (
+        !isLoading && <p>No profile has been loaded.</p>
+      )}
       <ErrorDisplay errors={errors} />
       <button
-        onClick={() => updateUser({ ...user, name: 'New Name' })}
-        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        type="button"
+        disabled={isLoading}
+        onClick={() => {
+          void refresh();
+        }}
       >
-        Update User
+        Refresh profile
       </button>
+    </section>
+  );
+}
+
+export function ProfileDemo() {
+  const [api] = useState(() => new SampleUserApi());
+  const [storage] = useState(() => new MemoryUserStorage());
+  const [offline, setOffline] = useState(false);
+  return (
+    <div>
+      <label className="fixture-control">
+        <input
+          type="checkbox"
+          checked={offline}
+          onChange={(event) => {
+            setOffline(event.target.checked);
+            api.setOffline(event.target.checked);
+          }}
+        />{" "}
+        Sample source offline
+      </label>
+      <UserProfile api={api} storage={storage} />
+      <p className="scope-note">
+        Local sample data and session memory. No account, email or network
+        service is used.
+      </p>
     </div>
   );
-};
+}

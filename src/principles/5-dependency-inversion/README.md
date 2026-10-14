@@ -1,38 +1,21 @@
-# Dependency Inversion Principle (DIP)
+# Dependency Inversion / Order counter
 
-## Definition
-> High-level modules should not depend on low-level modules. Both should depend on abstractions.
-> Abstractions should not depend on details. Details should depend on abstractions.
+[Repository](../../../README.md) · [Exercise](exercise/README.md)
 
-## Why It Matters
+Order policy accepts storage and notification abstractions. The composition boundary selects the actual implementations. A generic service container is unnecessary for this small example.
 
-DIP creates flexible, testable architectures:
-- **Enables testing**: Can inject mock implementations
-- **Reduces coupling**: Changes to implementations don't affect high-level code
-- **Improves flexibility**: Easy to swap implementations
-- **Facilitates mocking**: Essential for unit testing
+## Run the example
 
-## Signs of DIP Violation
+Select Demo, choose Email or SMS, and record a sample order. The selector changes the actual injected notification dependency, and the resulting receipt is displayed. Records are session-local and amounts use integer GBP pence. No real message, payment or database service is used.
 
-- Direct instantiation of dependencies with `new`
-- Tight coupling to specific implementations
-- Hard-to-test code due to concrete dependencies
-- Importing concrete classes instead of interfaces
-- Unable to swap implementations easily
+## Follow the source
 
-## Example in This Repository
+Read the [before example](bad-example/OrderService.tsx), then the [refactored example](good-example/OrderService.tsx). Open the matching lesson’s Before/Refactored sections to see the actual source rather than a fallback snippet.
 
-### Bad Example ❌
-`OrderService` directly creates and depends on `EmailService` and `MySQLDatabase` concrete classes.
+The [foundation tests](../../../src/test/foundations.test.tsx) provide focused evidence for the chosen boundary. They do not prove every future implementation satisfies the principle.
 
-### Good Example ✅
-`OrderService` depends on `NotificationService` and `Database` interfaces, with implementations injected.
+## Study pressure and limits
 
-## Real-World Application
+Inject a failing notification fixture and specify the outcome when storage succeeded first. Write a test for that partial failure, then decide whether to return a richer outcome. Do not pretend notification failure rolled back a recorded order.
 
-Common patterns following DIP:
-- Dependency Injection
-- Inversion of Control containers
-- Repository pattern
-- Service interfaces
-- Plugin architectures
+The advanced track for this lesson is future work. The current goal is a connected, runnable foundation with clear limits, not a complete production service.

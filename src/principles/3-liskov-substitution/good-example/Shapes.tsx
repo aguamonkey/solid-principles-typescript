@@ -11,7 +11,7 @@ export interface Shape {
 export class Rectangle implements Shape {
   constructor(
     private width: number,
-    private height: number
+    private height: number,
   ) {}
 
   getArea(): number {
@@ -80,32 +80,28 @@ export function calculateTotalArea(shapes: Shape[]): number {
 }
 
 // React component demonstrating proper LSP
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 export const ShapeDemo: React.FC = () => {
   const [totalArea, setTotalArea] = useState<number>(0);
 
   const calculateAreas = () => {
-    const shapes: Shape[] = [
-      new Rectangle(5, 4),
-      new Square(3),
-      new Circle(2),
-    ];
+    const shapes: Shape[] = [new Rectangle(5, 4), new Square(3), new Circle(2)];
 
     // All shapes can be used interchangeably - LSP is satisfied
     const total = calculateTotalArea(shapes);
     setTotalArea(total);
 
     // Display each shape
-    shapes.forEach(shape => {
+    shapes.forEach((shape) => {
       console.log(`${shape.describe()}: Area = ${shape.getArea().toFixed(2)}`);
     });
   };
 
   return (
     <div className="p-4">
-      <button 
-        onClick={calculateAreas} 
+      <button
+        onClick={calculateAreas}
         className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
       >
         Calculate Total Area

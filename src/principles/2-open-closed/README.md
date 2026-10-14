@@ -1,36 +1,21 @@
-# Open/Closed Principle (OCP)
+# Open/Closed / Dispatch room
 
-## Definition
-> Software entities should be open for extension, but closed for modification.
+[Repository](../../../README.md) · [Exercise](exercise/README.md)
 
-## Why It Matters
+Add a new registered notification strategy without changing the lookup algorithm. Registration and composition are expected to change. A closed enum or switch can be clearer for a deliberately fixed set.
 
-The Open/Closed Principle allows systems to grow without breaking existing functionality:
-- **Reduces risk**: New features don't modify tested code
-- **Improves maintainability**: Existing code remains untouched
-- **Enables scalability**: Easy to add new variations
-- **Promotes abstraction**: Forces thinking about interfaces
+## Run the example
 
-## Signs of OCP Violation
+Select Demo and send through Email, SMS, Push or Slack. The visible local receipt is returned by the selected strategy. No real messages are sent. Duplicate/blank registration keys and unknown channel lookup throw.
 
-- Adding new features requires modifying existing classes
-- Switch statements or if-else chains checking types
-- Frequent changes to core business logic
-- Copy-pasting code with slight variations
+## Follow the source
 
-## Example in This Repository
+Read the [before example](bad-example/NotificationService.tsx), then the [refactored example](good-example/NotificationService.tsx). Open the matching lesson’s Before/Refactored sections to see the actual source rather than a fallback snippet.
 
-### Bad Example ❌
-The `NotificationService` uses switch statements to handle different notification types. Adding a new type requires modifying the existing class.
+The [foundation tests](../../../src/test/foundations.test.tsx) provide focused evidence for the chosen boundary. They do not prove every future implementation satisfies the principle.
 
-### Good Example ✅
-Uses strategy pattern with `NotificationStrategy` interface. New notification types can be added by creating new classes without modifying existing code.
+## Study pressure and limits
 
-## Real-World Application
+Add a test-only webhook strategy, register it, and expose it in the demo. Keep the dispatcher lookup unchanged; test the receipt, an unknown key and duplicate registration.
 
-Common patterns that follow OCP:
-- Strategy Pattern
-- Template Method Pattern
-- Observer Pattern
-- Decorator Pattern
-- Plugin architectures
+The advanced track for this lesson is future work. The current goal is a connected, runnable foundation with clear limits, not a complete production service.

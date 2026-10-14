@@ -44,28 +44,28 @@ export class Square extends Rectangle {
 export function resizeRectangle(rectangle: Rectangle): void {
   rectangle.setWidth(5);
   rectangle.setHeight(4);
-  
+
   // This assertion fails for Square!
   const expectedArea = 20;
   const actualArea = rectangle.getArea();
-  
+
   if (actualArea !== expectedArea) {
     throw new Error(`Expected area ${expectedArea}, but got ${actualArea}`);
   }
 }
 
 // React component demonstrating the problem
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 export const ShapeDemo: React.FC = () => {
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState<string>("");
 
   const testRectangle = () => {
     try {
       const rect = new Rectangle();
       resizeRectangle(rect);
-      setError('');
-      console.log('Rectangle works fine!');
+      setError("");
+      console.log("Rectangle works fine!");
     } catch (e: any) {
       setError(e.message);
     }
@@ -75,8 +75,8 @@ export const ShapeDemo: React.FC = () => {
     try {
       const square = new Square();
       resizeRectangle(square); // Violates LSP - throws error!
-      setError('');
-      console.log('Square works fine!');
+      setError("");
+      console.log("Square works fine!");
     } catch (e: any) {
       setError(e.message);
     }
@@ -84,10 +84,16 @@ export const ShapeDemo: React.FC = () => {
 
   return (
     <div className="p-4">
-      <button onClick={testRectangle} className="mr-2 px-4 py-2 bg-green-500 text-white rounded">
+      <button
+        onClick={testRectangle}
+        className="mr-2 px-4 py-2 bg-green-500 text-white rounded"
+      >
         Test Rectangle
       </button>
-      <button onClick={testSquare} className="mr-2 px-4 py-2 bg-red-500 text-white rounded">
+      <button
+        onClick={testSquare}
+        className="mr-2 px-4 py-2 bg-red-500 text-white rounded"
+      >
         Test Square (Breaks!)
       </button>
       {error && <div className="mt-4 text-red-600">Error: {error}</div>}

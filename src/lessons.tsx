@@ -1,3 +1,4 @@
+import { GeometryContractLab } from "./principles/3-liskov-substitution/advanced/GeometryContractLab";
 import { DispatchLab } from "./principles/2-open-closed/advanced/DispatchLab";
 import type { ComponentType } from "react";
 import { ProfileDemo } from "./principles/1-single-responsibility/good-example/UserProfile";
@@ -35,6 +36,7 @@ interface Lesson {
   afterFile: string;
   demo: ComponentType;
   lab?: ComponentType;
+  labLabel?: string;
 }
 export const lessons: readonly Lesson[] = [
   {
@@ -67,6 +69,8 @@ export const lessons: readonly Lesson[] = [
     beforeFile: "Shapes",
     afterFile: "Shapes",
     demo: ShapeDemo,
+    lab: GeometryContractLab,
+    labLabel: "Contract Lab",
   },
   {
     id: 4,

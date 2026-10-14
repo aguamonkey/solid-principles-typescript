@@ -110,7 +110,7 @@ export const ShapeDemo: React.FC = () => {
         <div className="mt-4">
           <p className="text-lg">Total Area: {totalArea.toFixed(2)}</p>
           <p className="text-sm text-gray-600">
-            All shapes implement the Shape interface correctly - LSP maintained!
+            These positive-dimension fixtures support the shared area operation.
           </p>
         </div>
       )}

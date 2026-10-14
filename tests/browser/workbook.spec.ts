@@ -72,3 +72,29 @@ for (const mode of ['desktop', 'mobile', 'dark'] as const) {
     await expect(page.getByTestId('dispatch-row-1')).toContainText('UNSUPPORTED');
   });
 }
+
+for (const mode of ['desktop', 'mobile', 'dark'] as const) {
+  test(`geometry substitution contract: ${mode}`, async ({ page }) => {
+    if (mode === 'mobile') await page.setViewportSize({ width: 390, height: 844 });
+    if (mode === 'dark') await page.emulateMedia({ colorScheme: 'dark' });
+    await page.goto('./#/principle/3-liskov-substitution');
+    await page.getByRole('button', {name:'Contract Lab',exact:true}).click();
+    const result = page.getByTestId('geometry-result');
+    await expect(result).toHaveAttribute('data-outcome','passed');
+    await expect(page.getByRole('heading', {name:'80.00 cm²'})).toBeVisible();
+    await page.getByLabel('Implementation', {exact:true}).selectOption('unavailable');
+    await expect(result).toContainText('PERMITTED UNAVAILABILITY');
+    await page.getByLabel('Implementation', {exact:true}).selectOption('broken');
+    await expect(result).toContainText('CONTRACT VIOLATION');
+    await expect(page.getByRole('heading', {name:'40.00 cm²'})).toBeVisible();
+    await expect(page.getByRole('heading', {name:'20.00 cm²'})).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    await page.screenshot({path:`test-results/geometry-lab-${mode}.png`,fullPage:true});
+    await page.getByLabel('Implementation', {exact:true}).selectOption('circle');
+    const factor = page.getByLabel('Scale factor', {exact:true});
+    await factor.focus(); await expect(factor).toBeFocused();
+    await factor.selectOption('0.5');
+    await expect(result).toHaveAttribute('data-outcome','passed');
+    await expect(page.getByRole('heading', {name:'3.14 cm²'})).toBeVisible();
+  });
+}

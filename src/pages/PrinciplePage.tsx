@@ -74,7 +74,7 @@ export default function PrinciplePage({
               aria-pressed={section === item}
               onClick={() => setSection(item)}
             >
-              {item}
+              {item === "Extension Lab" ? (lesson.labLabel ?? item) : item}
             </button>
           ))}
       </nav>

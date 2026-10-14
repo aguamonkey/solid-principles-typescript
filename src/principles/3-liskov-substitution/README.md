@@ -1,6 +1,6 @@
 # Liskov Substitution / Geometry bench
 
-[Repository](../../../README.md) · [Exercise](exercise/README.md)
+[Repository](../../../README.md) · [Exercise](exercise/README.md) · [Foundation solution](SOLUTION.md) · [Contract Lab](advanced/README.md)
 
 An implementation must honour behavioural promises, not just method signatures. The before example shows a mutable Square changing the Rectangle setters’ meaning. The refactored caller uses area/perimeter operations without that mutable rectangle contract.
 
@@ -18,4 +18,4 @@ The [foundation tests](../../../src/test/foundations.test.tsx) provide focused e
 
 Specify the supported dimension domain, validate constructors/setters, and add shared contract tests for each shape. Explain which failures happen at construction and why successful shapes remain substitutable.
 
-The advanced track for this lesson is future work. The current goal is a connected, runnable foundation with clear limits, not a complete production service.
+The [Contract Lab](advanced/README.md) adds immutable measured shapes, a shared scaling contract, explicit unavailability and a deliberately broken implementation. It includes a decision record, a separate triangle exercise and interview prompts. Keep the foundation exercise separate: the original demo still uses positive sample dimensions without validation.

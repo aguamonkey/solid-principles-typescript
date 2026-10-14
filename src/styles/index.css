@@ -498,3 +498,66 @@ input[type="checkbox"] {
 .dispatch-register p {
   overflow-wrap: anywhere;
 }
+
+.geometry-masthead {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 16px;
+}
+.geometry-rules {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  align-items: baseline;
+  border-block: 1px solid var(--line);
+  margin: 26px 0;
+  padding: 20px 0;
+}
+.geometry-rules span {
+  font:
+    34px Georgia,
+    serif;
+}
+.geometry-rules small {
+  font: 12px monospace;
+}
+.geometry-controls,
+.geometry-measures {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.geometry-result {
+  border-left: 3px solid var(--ink);
+  padding: 14px 18px;
+  background: var(--paper);
+  margin: 24px 0;
+}
+.geometry-result[data-outcome="violation"] {
+  border-color: var(--accent);
+}
+.geometry-result[data-outcome="violation"] .eyebrow {
+  color: var(--accent);
+}
+.geometry-measures section {
+  padding: 20px 0;
+  border-block: 1px solid var(--line);
+}
+.geometry-measures h3 {
+  font:
+    42px Georgia,
+    serif;
+  margin: 20px 0;
+}
+.geometry-measures small {
+  font: 15px monospace;
+}
+@media (max-width: 560px) {
+  .geometry-controls,
+  .geometry-measures {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}

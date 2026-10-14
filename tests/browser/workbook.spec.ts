@@ -52,3 +52,23 @@ test('dark contact desk renders its loaded data', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Morgan Ellis' })).toBeVisible();
   await page.screenshot({ path: 'test-results/contact-desk-dark.png', fullPage: true });
 });
+
+for (const mode of ['desktop', 'mobile', 'dark'] as const) {
+  test(`dispatch compatibility lab: ${mode}`, async ({ page }) => {
+    if (mode === 'mobile') await page.setViewportSize({ width: 390, height: 844 });
+    if (mode === 'dark') await page.emulateMedia({ colorScheme: 'dark' });
+    await page.goto('./#/principle/2-open-closed');
+    await page.getByRole('button', { name: 'Extension Lab', exact: true }).click();
+    await expect(page.getByTestId('dispatch-row-1')).toContainText('UNSUPPORTED');
+    const unchanged = await page.getByTestId('dispatch-row-0').innerText();
+    await page.getByRole('button', { name: 'Include webhook extension' }).click();
+    await expect(page.getByTestId('dispatch-row-1')).toContainText('Webhook preview');
+    await expect(page.getByTestId('dispatch-row-0')).toHaveText(unchanged, { useInnerText: true });
+    await expect(page.getByTestId('dispatch-row-2')).toContainText('UNSUPPORTED');
+    await expect(page.getByTestId('dispatch-row-3')).toContainText('Invalid payload');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    await page.screenshot({ path: `test-results/dispatch-lab-${mode}.png`, fullPage: true });
+    await page.getByRole('button', { name: 'Include webhook extension' }).click();
+    await expect(page.getByTestId('dispatch-row-1')).toContainText('UNSUPPORTED');
+  });
+}

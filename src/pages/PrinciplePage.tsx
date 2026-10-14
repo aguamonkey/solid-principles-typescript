@@ -8,6 +8,7 @@ const sections = [
   "Before",
   "Refactored",
   "Demo",
+  "Extension Lab",
   "Exercise",
   "Solution",
 ] as const;
@@ -22,6 +23,7 @@ export default function PrinciplePage({
   if (!lesson) return <p>Lesson not found.</p>;
   const content = lessonContent(lesson);
   const Demo = lesson.demo;
+  const Lab = lesson.lab;
   const folder = `${lesson.id}-${lesson.slug}`;
   const markdown = (text: string, exercise = false) => (
     <div className="study-copy">
@@ -60,7 +62,11 @@ export default function PrinciplePage({
       </header>
       <nav className="lesson-sections" aria-label="Lesson sections">
         {sections
-          .filter((item) => item !== "Solution" || content.solution)
+          .filter(
+            (item) =>
+              (item !== "Solution" || content.solution) &&
+              (item !== "Extension Lab" || Lab),
+          )
           .map((item) => (
             <button
               key={item}
@@ -90,6 +96,11 @@ export default function PrinciplePage({
       {section === "Demo" && (
         <div className="demo-frame">
           <Demo />
+        </div>
+      )}
+      {section === "Extension Lab" && Lab && (
+        <div className="demo-frame">
+          <Lab />
         </div>
       )}
       {section === "Exercise" && markdown(content.exercise, true)}

@@ -18,4 +18,8 @@ The [foundation tests](../../../src/test/foundations.test.tsx) provide focused e
 
 Add a test-only webhook strategy, register it, and expose it in the demo. Keep the dispatcher lookup unchanged; test the receipt, an unknown key and duplicate registration.
 
-The advanced track for this lesson is future work. The current goal is a connected, runnable foundation with clear limits, not a complete production service.
+## Advanced progression
+
+Open **Extension Lab** to study [exact payload versions and per-record compatibility](advanced/README.md). Registering webhook support changes its preview while leaving email v1, the future version and damaged payload outcomes stable. The advanced track includes a decision, separate exercise/solution and interview notes.
+
+The original Demo retains its synchronous notification-strategy exercise. Neither demonstration sends real messages.

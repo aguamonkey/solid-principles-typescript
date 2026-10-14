@@ -449,3 +449,52 @@ input[type="checkbox"] {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
+
+.dispatch-masthead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 14px;
+}
+.dispatch-summary {
+  display: flex;
+  gap: 18px;
+  align-items: baseline;
+  padding: 16px 0;
+}
+.dispatch-summary strong {
+  font:
+    64px Georgia,
+    serif;
+}
+.dispatch-summary span {
+  font: 14px monospace;
+}
+.dispatch-register {
+  list-style: none;
+  padding: 0;
+  margin: 24px 0;
+}
+.dispatch-register li {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  gap: 14px;
+  border-top: 1px solid var(--line);
+  padding: 22px 0;
+}
+.dispatch-register h3 {
+  margin: 6px 0 12px;
+}
+.dispatch-schema {
+  font: 12px/1.8 monospace;
+  overflow-wrap: anywhere;
+}
+.outcome-unsupported,
+.outcome-rejected {
+  color: var(--accent) !important;
+}
+.dispatch-register p {
+  overflow-wrap: anywhere;
+}

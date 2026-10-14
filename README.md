@@ -31,9 +31,16 @@ Open the URL printed by Vite. Production assets use `/solid-principles-typescrip
 
 Actual Chromium screenshots from production browser tests. The workbook uses ruled paper, serif headings and an indexed navigation rather than generic marketing cards.
 
+## Dispatch room · extension contracts
+
+<img src="docs/images/dispatch-lab-desktop.png" alt="The versioned dispatch lab after adding webhook support, showing ready, unsupported and rejected outcomes." width="620">
+<img src="docs/images/dispatch-lab-dark.png" alt="The dispatch compatibility lab in dark appearance." width="620">
+
+The Extension Lab previews a bundled batch through exact channel/version registrations. No email or webhook request is sent. Desktop, mobile and dark behaviour is covered by browser tests.
+
 ## How to study
 
-Follow the [learning path](docs/LEARNING_PATH.md). SRP now includes a concrete exercise, separate solution, decision record and interview prompts. The other four foundations are connected and runnable, with focused tests and concrete exercises; their deeper guides and advanced tracks remain future work.
+Follow the [learning path](docs/LEARNING_PATH.md). SRP now includes a concrete exercise, separate solution, decision record and interview prompts. OCP adds a [versioned dispatch lab](src/principles/2-open-closed/advanced/README.md), separate compatibility exercise/solution and decision/interview notes. LSP/ISP/DIP have connected foundations; their advanced tracks remain future work.
 
 The Before and Refactored sections display actual checked-in source. The Demo section mounts the local implementation. The Practice bench provides recall questions and links to exercises; it does **not** compile or execute arbitrary TypeScript. Use your editor and repository tests for coding exercises.
 
@@ -47,7 +54,7 @@ npx playwright install chromium
 npm run test:browser   # Production build must already exist
 ```
 
-The focused suites contain **40 unit/component tests, four documentation-tooling tests and eight Chromium browser tests**. Browser checks cover all five demos, direct lesson reloads, guided practice, a narrow viewport and dark appearance. SRP tests include validation, runtime decoding, failure retention, obsolete work, unmounting, storage failure and StrictMode cleanup.
+The focused suites contain **60 unit/component tests, four documentation-tooling tests and eleven Chromium browser tests**. Browser checks cover all five demos, direct lesson reloads, guided practice, a narrow viewport and dark appearance. SRP tests include validation, runtime decoding, failure retention, obsolete work, unmounting, storage failure and StrictMode cleanup.
 
 CI repeats these checks with Node 22 and uploads browser results on failure. No test claims to prove SOLID compliance in every context. The documentation checker covers local inline links, images and Markdown heading fragments; it does not check external URL availability or reference-style links. See [contributing](CONTRIBUTING.md) for screenshot and review expectations.
 

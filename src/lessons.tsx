@@ -1,3 +1,4 @@
+import { DispatchLab } from "./principles/2-open-closed/advanced/DispatchLab";
 import type { ComponentType } from "react";
 import { ProfileDemo } from "./principles/1-single-responsibility/good-example/UserProfile";
 import { NotificationSender } from "./principles/2-open-closed/good-example/NotificationService";
@@ -33,6 +34,7 @@ interface Lesson {
   beforeFile: string;
   afterFile: string;
   demo: ComponentType;
+  lab?: ComponentType;
 }
 export const lessons: readonly Lesson[] = [
   {
@@ -54,6 +56,7 @@ export const lessons: readonly Lesson[] = [
     beforeFile: "NotificationService",
     afterFile: "NotificationService",
     demo: NotificationSender,
+    lab: DispatchLab,
   },
   {
     id: 3,

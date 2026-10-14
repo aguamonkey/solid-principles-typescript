@@ -15,6 +15,9 @@ export default function HomePage() {
         Five small settings for studying where change belongs. Follow the
         source, run the demonstration, then make a change yourself.
       </p>
+      <p>
+        <Link to="/study">Start the interview study plan</Link>
+      </p>
       <div className="study-sequence">
         <span>01 / READ THE GUIDE</span>
         <span>02 / RUN THE DEMO</span>

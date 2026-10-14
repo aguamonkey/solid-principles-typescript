@@ -122,3 +122,61 @@ export function lessonContent(lesson: Lesson) {
     solution: solutions[`${folder}/SOLUTION.md`],
   };
 }
+
+const studyFiles = import.meta.glob<string>("./principles/**/*.md", {
+  query: "?raw",
+  import: "default",
+  eager: true,
+});
+export interface StudyDocument {
+  readonly path: string;
+  readonly label: string;
+  readonly body: string;
+}
+export function lessonStudyDocuments(lesson: Lesson): readonly StudyDocument[] {
+  const root = `./principles/${lesson.id}-${lesson.slug}`;
+  const documents: StudyDocument[] = [];
+  const add = (file: string, label: string, required = false) => {
+    const path = `${root}/${file}`;
+    const body = studyFiles[path];
+    if (!body?.trim()) {
+      if (required) throw new Error(`Missing study document: ${path}`);
+      return;
+    }
+    documents.push({ path, label, body });
+  };
+  add("README.md", "Foundation · Guide", true);
+  add("exercise/README.md", "Foundation · Exercise", true);
+  add("SOLUTION.md", "Foundation · Solution notes", true);
+  add("DECISION.md", "Foundation · Decision");
+  add("INTERVIEW.md", "Foundation · Interview prompts");
+  add("INTERVIEW_NOTES.md", "Foundation · Answer notes");
+  if (lesson.lab)
+    for (const [file, label] of [
+      ["README.md", "Guide"],
+      ["DECISION.md", "Decision"],
+      ["EXERCISE.md", "Exercise"],
+      ["SOLUTION.md", "Solution notes"],
+      ["INTERVIEW.md", "Interview prompts"],
+      ["INTERVIEW_NOTES.md", "Answer notes"],
+    ])
+      add(`advanced/${file}`, `Advanced · ${label}`, true);
+  return documents;
+}
+const repositorySource =
+  "https://github.com/aguamonkey/solid-principles-typescript/blob/main/src/";
+export function studyDocumentUrl(path: string): string {
+  return new URL(path.replace(/^\.\//, ""), repositorySource).href;
+}
+export function localStudyDocument(
+  lesson: Lesson,
+  from: string,
+  href: string,
+): StudyDocument | undefined {
+  const target = new URL(href, studyDocumentUrl(from));
+  // Fragment links keep their source-page anchor; local notes currently have no heading IDs.
+  if (target.hash) return undefined;
+  return lessonStudyDocuments(lesson).find(
+    (document) => studyDocumentUrl(document.path) === target.href,
+  );
+}

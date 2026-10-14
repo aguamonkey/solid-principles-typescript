@@ -723,3 +723,8 @@ input[type="checkbox"] {
     border-bottom: 0;
   }
 }
+
+.study-table {
+  max-width: 100%;
+  overflow-x: auto;
+}

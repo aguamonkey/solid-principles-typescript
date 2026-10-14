@@ -1,7 +1,13 @@
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { lessons, lessonContent } from "../lessons";
+import {
+  lessons,
+  lessonContent,
+  lessonStudyDocuments,
+  localStudyDocument,
+  studyDocumentUrl,
+} from "../lessons";
 
 const sections = [
   "Guide",
@@ -11,6 +17,7 @@ const sections = [
   "Extension Lab",
   "Exercise",
   "Solution",
+  "Study notes",
 ] as const;
 type Section = (typeof sections)[number];
 export default function PrinciplePage({
@@ -20,31 +27,56 @@ export default function PrinciplePage({
 }) {
   const lesson = lessons.find((item) => item.id === principleId);
   const [section, setSection] = useState<Section>("Guide");
+  const [studyPath, setStudyPath] = useState("");
   if (!lesson) return <p>Lesson not found.</p>;
   const content = lessonContent(lesson);
   const Demo = lesson.demo;
   const Lab = lesson.lab;
-  const folder = `${lesson.id}-${lesson.slug}`;
-  const markdown = (text: string, exercise = false) => (
+  const root = `./principles/${lesson.id}-${lesson.slug}`;
+  const notes = lessonStudyDocuments(lesson);
+  const selectedNote =
+    notes.find((item) => item.path === studyPath) ??
+    notes.find((item) => item.label.endsWith("Interview prompts")) ??
+    notes[0];
+  const markdown = (text: string, path = `${root}/README.md`) => (
     <div className="study-copy">
       <ReactMarkdown
         skipHtml
         remarkPlugins={[remarkGfm]}
         components={{
-          a: ({ href, children }) => (
-            <a
-              href={
-                href?.startsWith("http")
-                  ? href
-                  : new URL(
-                      href ?? "",
-                      `https://github.com/aguamonkey/solid-principles-typescript/blob/main/src/principles/${folder}/${exercise ? "exercise/" : ""}README.md`,
-                    ).href
-              }
+          table: ({ children }) => (
+            <div
+              className="study-table"
+              role="region"
+              aria-label="Study table"
+              tabIndex={0}
             >
-              {children}
-            </a>
+              <table>{children}</table>
+            </div>
           ),
+          a: ({ href, children }) => {
+            const target = href
+              ? localStudyDocument(lesson, path, href)
+              : undefined;
+            return (
+              <a
+                href={
+                  href ? new URL(href, studyDocumentUrl(path)).href : undefined
+                }
+                onClick={
+                  target
+                    ? (event) => {
+                        event.preventDefault();
+                        setStudyPath(target.path);
+                        setSection("Study notes");
+                      }
+                    : undefined
+                }
+              >
+                {children}
+              </a>
+            );
+          },
         }}
       >
         {text}
@@ -103,8 +135,32 @@ export default function PrinciplePage({
           <Lab />
         </div>
       )}
-      {section === "Exercise" && markdown(content.exercise, true)}
-      {section === "Solution" && content.solution && markdown(content.solution)}
+      {section === "Exercise" &&
+        markdown(content.exercise, `${root}/exercise/README.md`)}
+      {section === "Solution" &&
+        content.solution &&
+        markdown(content.solution, `${root}/SOLUTION.md`)}
+      {section === "Study notes" && (
+        <section aria-label="Study documents">
+          <p className="scope-note">
+            Read prompts before answer notes. Foundation and advanced exercises
+            are separate changes to attempt in your editor.
+          </p>
+          <label htmlFor="study-document">Study document</label>
+          <select
+            id="study-document"
+            value={selectedNote.path}
+            onChange={(event) => setStudyPath(event.target.value)}
+          >
+            {notes.map((note) => (
+              <option key={note.path} value={note.path}>
+                {note.label}
+              </option>
+            ))}
+          </select>
+          {markdown(selectedNote.body, selectedNote.path)}
+        </section>
+      )}
     </article>
   );
 }

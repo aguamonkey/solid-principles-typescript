@@ -142,3 +142,44 @@ for (const mode of ['desktop','mobile','dark'] as const) {
     await page.getByRole('button',{name:'Process pending receipt'}).click();await expect(page.getByRole('status')).toContainText('No pending receipts');
   });
 }
+
+for (const [index,slug] of paths.entries()) {
+  test(`study documents stay local for lesson ${index+1}`,async ({page}) => {
+    await page.goto(`./#/principle/${index+1}-${slug}`);
+    await page.getByRole('button',{name:'Study notes',exact:true}).click();
+    const selector = page.getByLabel('Study document',{exact:true});
+    const root = `./principles/${index+1}-${slug}`;
+    const folder = index === 0 ? root : `${root}/advanced`;
+    await expect(selector).toHaveValue(`${folder}/INTERVIEW.md`);
+    const notes = page.getByRole('region',{name:'Study documents'});
+    await notes.getByRole('link',{name:/answer notes/i}).click();
+    await expect(selector).toHaveValue(`${folder}/INTERVIEW_NOTES.md`);
+    await expect(page).toHaveURL(new RegExp(`#/principle/${index+1}-${slug}$`));
+    await selector.selectOption(`${folder}/${index === 0 ? 'exercise/README.md' : 'EXERCISE.md'}`);
+    await notes.getByRole('link',{name:/solution/i}).first().click();
+    await expect(selector).toHaveValue(`${folder}/SOLUTION.md`);
+    await selector.selectOption(`${folder}/README.md`);
+    const source = notes.getByRole('link').filter({hasText:index === 0 ? 'User.ts' : index === 1 ? 'DispatchRegistry.ts' : index === 2 ? 'ScalingContract.ts' : index === 3 ? 'WorkshopPorts.ts' : 'OrderPolicy.ts'}).first();
+    await expect(source).toHaveAttribute('href',new RegExp(`/blob/main/src/principles/${index+1}-${slug}/`));
+    if (index > 0) {
+      await notes.getByRole('link',{name:'Foundation',exact:true}).click();
+      await expect(selector).toHaveValue(`${root}/README.md`);
+    }
+  });
+}
+for (const mode of ['desktop','mobile','dark'] as const) {
+  test(`interview study plan links to local lessons: ${mode}`,async ({page}) => {
+    if (mode === 'mobile') await page.setViewportSize({width:390,height:844});
+    if (mode === 'dark') await page.emulateMedia({colorScheme:'dark'});
+    await page.goto('./#/study');
+    await expect(page.getByRole('heading',{name:'Practise explaining one decision at a time'})).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    await page.screenshot({path:`test-results/study-plan-${mode}.png`,fullPage:true});
+    await page.getByRole('link',{name:'Order counter',exact:true}).click();
+    await expect(page).toHaveURL(/#\/principle\/5-dependency-inversion$/);
+    await page.getByRole('button',{name:'Study notes',exact:true}).click();
+    await page.getByLabel('Study document',{exact:true}).selectOption('./principles/5-dependency-inversion/advanced/EXERCISE.md');
+    await expect(page.getByRole('heading',{name:'Exercise · deduplicating local preview supplier'})).toBeVisible();
+    await page.reload();await expect(page.getByRole('heading',{name:'Dependency Inversion',exact:true})).toBeVisible();
+  });
+}

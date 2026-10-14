@@ -1,11 +1,12 @@
 # Study one decision at a time
 
-[Repository](../README.md)
+[Repository](../README.md) · [Simple interview study plan](INTERVIEW_PREP.md)
 
 1. Start with [Contact desk](../src/principles/1-single-responsibility/README.md). Run it, follow the source, then attempt its form-rule exercise before reading the solution.
 2. Explain the owner of each change aloud. Compare form validation with source data shape and display.
 3. Continue through the other four connected foundation demos. Their exercises now state a concrete pressure; OCP also includes a separate versioned extension lab; LSP adds a separate scaling contract lab; ISP adds a consumer capability lab; DIP adds an order boundary lab with replay and uncertain acknowledgements.
-4. Use the Practice bench to recall a decision before opening the guide. Implement exercises in your editor and verify them with tests.
+4. Open Study notes for local decision records, interview prompts and separate answer notes. Use the Study document selector to move between foundation and advanced material.
+5. Use the Practice bench to recall a decision before opening the guide. Implement exercises in your editor and verify them with tests.
 
 ## Cross-language study
 

@@ -21,6 +21,7 @@ export default function Layout() {
           <NavLink to="/" end>
             Index
           </NavLink>
+          <NavLink to="/study">Study plan</NavLink>
           <NavLink to="/playground">Practice bench</NavLink>
           <a href="https://github.com/aguamonkey/solid-principles-typescript">
             GitHub

@@ -1,3 +1,4 @@
+import StudyPlanPage from "../pages/StudyPlanPage";
 import { HashRouter, Routes, Route, Link } from "react-router-dom";
 import Layout from "../components/Layout";
 import HomePage from "../pages/HomePage";
@@ -19,6 +20,7 @@ export default function AppRouter() {
               }
             />
           ))}
+          <Route path="/study" element={<StudyPlanPage />} />
           <Route path="/playground" element={<InteractivePlayground />} />
           <Route
             path="*"

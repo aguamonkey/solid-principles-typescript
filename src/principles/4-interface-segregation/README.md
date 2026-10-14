@@ -1,6 +1,6 @@
 # Interface Segregation / Workshop roster
 
-[Repository](../../../README.md) · [Exercise](exercise/README.md)
+[Repository](../../../README.md) · [Exercise](exercise/README.md) · [Solution notes](SOLUTION.md) · [Capability Lab](advanced/README.md)
 
 Consumers request a capability such as charging rather than every operation in a large Worker interface. A human does not need to pretend to have a battery. Small interfaces are useful because of consumer requirements, not because one method per interface is a universal rule.
 
@@ -18,4 +18,4 @@ The [foundation tests](../../../src/test/foundations.test.tsx) provide focused e
 
 Add an inspection consumer accepting only an Inspectable capability. Use a fixture that exposes only inspection, then decide which existing workers should support it. Keep unrelated charging/feeding functions unchanged.
 
-The advanced track for this lesson is future work. The current goal is a connected, runnable foundation with clear limits, not a complete production service.
+The [Capability Lab](advanced/README.md) adds a read-only board, a read-and-schedule dispatcher and a cohesive inspection workflow. Compare dedicated providers with a shared workshop, then attempt the separate audit exercise. Decision notes and interview prompts explain when to split or compose requirements.

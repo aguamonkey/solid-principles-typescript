@@ -561,3 +561,84 @@ input[type="checkbox"] {
     gap: 12px;
   }
 }
+
+.workshop-masthead {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 16px;
+}
+.workshop-controls {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 24px;
+  align-items: end;
+  margin: 24px 0;
+}
+.workshop-matrix {
+  overflow-x: auto;
+  margin: 28px 0;
+}
+.workshop-matrix table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 14px;
+}
+.workshop-matrix caption {
+  text-align: left;
+  font: 12px monospace;
+  padding-bottom: 14px;
+}
+.workshop-matrix th,
+.workshop-matrix td {
+  padding: 14px 10px;
+  border-block: 1px solid var(--line);
+}
+.workshop-matrix tr[data-selected="true"] {
+  background: var(--paper);
+  color: var(--accent);
+}
+.workshop-port {
+  border-block: 1px solid var(--line);
+  padding: 18px 0;
+  margin: 24px 0;
+}
+.workshop-port h3 {
+  font:
+    26px Georgia,
+    serif;
+  overflow-wrap: anywhere;
+}
+.workshop-roster {
+  list-style: none;
+  padding: 0;
+  margin: 24px 0;
+}
+.workshop-roster li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.workshop-receipt {
+  border-left: 3px solid var(--accent);
+  padding: 18px;
+  background: var(--paper);
+  margin: 24px 0;
+}
+@media (max-width: 600px) {
+  .workshop-controls {
+    grid-template-columns: 1fr;
+  }
+  .workshop-masthead {
+    flex-wrap: wrap;
+  }
+  .workshop-matrix th,
+  .workshop-matrix td {
+    padding: 10px 6px;
+    font-size: 12px;
+  }
+}

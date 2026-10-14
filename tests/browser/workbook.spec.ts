@@ -98,3 +98,27 @@ for (const mode of ['desktop', 'mobile', 'dark'] as const) {
     await expect(page.getByRole('heading', {name:'3.14 cm²'})).toBeVisible();
   });
 }
+
+for (const mode of ['desktop','mobile','dark'] as const) {
+  test(`workshop consumer capabilities: ${mode}`,async ({page}) => {
+    if (mode === 'mobile') await page.setViewportSize({width:390,height:844});
+    if (mode === 'dark') await page.emulateMedia({colorScheme:'dark'});
+    await page.goto('./#/principle/4-interface-segregation');
+    const tab = page.getByRole('button',{name:'Capability Lab',exact:true});await tab.focus();await page.keyboard.press('Enter');
+    await page.getByRole('button',{name:'Read status board'}).click();await expect(page.getByRole('status')).toContainText('No work scheduled');
+    await page.getByLabel('Consumer',{exact:true}).selectOption('dispatch');
+    await expect(page.getByTestId('workshop-port')).toContainText('RosterReader & WorkScheduler');
+    await page.getByRole('button',{name:'Schedule frame run'}).click();await expect(page.getByRole('status')).toContainText('scheduled at press-07');
+    await page.getByRole('button',{name:'Schedule frame run'}).click();await expect(page.getByRole('status')).toContainText('No ready station');
+    await page.getByLabel('Consumer',{exact:true}).selectOption('board');
+    await page.getByRole('button',{name:'Use narrow providers'}).click();
+    await page.getByRole('button',{name:'Read status board'}).click();await expect(page.getByRole('status')).toContainText('Press 07 busy');
+    await page.getByLabel('Consumer',{exact:true}).selectOption('service');
+    await page.getByRole('button',{name:'Record next inspection'}).click();await expect(page.getByRole('status')).toContainText('Inspection recorded');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    await page.screenshot({path:`test-results/workshop-lab-${mode}.png`,fullPage:true});
+    await page.getByRole('button',{name:'Record next inspection'}).click();await expect(page.getByRole('status')).toContainText('No due inspections');
+    await page.getByRole('button',{name:'Use narrow providers'}).click();
+    await page.getByRole('button',{name:'Record next inspection'}).click();await expect(page.getByRole('status')).toContainText('Inspection recorded');
+  });
+}

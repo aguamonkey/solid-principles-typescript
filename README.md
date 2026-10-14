@@ -46,9 +46,17 @@ The Extension Lab previews a bundled batch through exact channel/version registr
 
 The Contract Lab distinguishes a successful replacement, permitted unavailability and broken behaviour. The same caller checks every implementation; no class-specific judgement is added to the inspector.
 
+## Workshop roster · consumer capabilities
+
+<img src="docs/images/workshop-lab-desktop.png" alt="The workshop lab maps each consumer to its required operations and records an inspection." width="620">
+<img src="docs/images/workshop-lab-mobile.png" alt="The workshop capability lab on a narrow mobile viewport." width="230">
+<img src="docs/images/workshop-lab-dark.png" alt="The workshop capability lab in dark appearance." width="620">
+
+The Capability Lab compares a read-only board, shift dispatch and a cohesive inspection desk. Dedicated providers demonstrate that unrelated operations are not required. Narrow types describe dependencies; they do not enforce permissions.
+
 ## How to study
 
-Follow the [learning path](docs/LEARNING_PATH.md). SRP now includes a concrete exercise, separate solution, decision record and interview prompts. OCP adds a [versioned dispatch lab](src/principles/2-open-closed/advanced/README.md), separate compatibility exercise/solution and decision/interview notes. LSP adds a [geometry contract lab](src/principles/3-liskov-substitution/advanced/README.md) with shared behavioural tests, decision notes and a separate triangle exercise. ISP/DIP have connected foundations; their advanced tracks remain future work.
+Follow the [learning path](docs/LEARNING_PATH.md). SRP now includes a concrete exercise, separate solution, decision record and interview prompts. OCP adds a [versioned dispatch lab](src/principles/2-open-closed/advanced/README.md), separate compatibility exercise/solution and decision/interview notes. LSP adds a [geometry contract lab](src/principles/3-liskov-substitution/advanced/README.md) with shared behavioural tests, decision notes and a separate triangle exercise. ISP adds a [workshop capability lab](src/principles/4-interface-segregation/advanced/README.md), narrow provider tests, an audit exercise and interview notes. DIP has a connected foundation; its advanced track remains future work.
 
 The Before and Refactored sections display actual checked-in source. The Demo section mounts the local implementation. The Practice bench provides recall questions and links to exercises; it does **not** compile or execute arbitrary TypeScript. Use your editor and repository tests for coding exercises.
 
@@ -62,7 +70,7 @@ npx playwright install chromium
 npm run test:browser   # Production build must already exist
 ```
 
-The focused suites contain **84 unit/component tests, four documentation-tooling tests and fourteen Chromium browser tests**. Browser checks cover all five demos, direct lesson reloads, guided practice, a narrow viewport and dark appearance. SRP tests include validation, runtime decoding, failure retention, obsolete work, unmounting, storage failure and StrictMode cleanup.
+The focused suites contain **103 unit/component tests, four documentation-tooling tests and seventeen Chromium browser tests**. Browser checks cover all five demos, direct lesson reloads, guided practice, a narrow viewport and dark appearance. SRP tests include validation, runtime decoding, failure retention, obsolete work, unmounting, storage failure and StrictMode cleanup.
 
 CI repeats these checks with Node 22 and uploads browser results on failure. No test claims to prove SOLID compliance in every context. The documentation checker covers local inline links, images and Markdown heading fragments; it does not check external URL availability or reference-style links. See [contributing](CONTRIBUTING.md) for screenshot and review expectations.
 

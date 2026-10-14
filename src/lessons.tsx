@@ -1,3 +1,4 @@
+import { WorkshopCapabilityLab } from "./principles/4-interface-segregation/advanced/WorkshopCapabilityLab";
 import { GeometryContractLab } from "./principles/3-liskov-substitution/advanced/GeometryContractLab";
 import { DispatchLab } from "./principles/2-open-closed/advanced/DispatchLab";
 import type { ComponentType } from "react";
@@ -81,6 +82,8 @@ export const lessons: readonly Lesson[] = [
     beforeFile: "Worker",
     afterFile: "Worker",
     demo: WorkerDemo,
+    lab: WorkshopCapabilityLab,
+    labLabel: "Capability Lab",
   },
   {
     id: 5,
